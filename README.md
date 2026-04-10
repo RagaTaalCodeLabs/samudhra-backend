@@ -24,7 +24,52 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+AI-assisted backend system with autonomous task orchestration for fee management
+
+Problem statement:
+
+Art managers find it difficult to collect fees from parents in their busy schedule. This application is a simple way to send customized emails that will run on a monthly cycle to trigger emails and send to clients by 4th of every month
+
+Architechture:
+
+Backend is NEST JS based modular architechture with cron jobs to trigger the emails to a list of emails every month
+
+AI usage:
+
+The application uses AI agents to make decidions about thee content of the emails
+
+Future enhancements:
+
+Retry and Queue system
+Emails are queued
+Retries on failure
+Background processing
+
+## Application description
+
+Automated Fee reminder application for art schools. This AI system can send fee reminder emails and generate dynamic email content based on
+
+Student name
+Last payment date
+Tone (gentle vs urgent)
+
+Before sending an email, AI decides
+Before sending email:
+
+Agent decides:
+Should we send reminder?
+Skip if recently contacted?
+Escalate tone?
+
+```
+[Scheduler]
+↓
+[Fee Reminder Service]
+↓
+[AI Decision Agent]
+↓
+[Email Service]
+```
 
 ## Installation
 
@@ -58,16 +103,4 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- Author - [Savitha Venkatapathy]
