@@ -30,7 +30,7 @@ Problem statement:
 
 Art managers find it difficult to collect fees from parents in their busy schedule. This application is a simple way to send customized emails that will run on a monthly cycle to trigger emails and send to clients by 4th of every month
 
-Architechture:
+##Architechture:
 
 Backend is NEST JS based modular architechture with cron jobs to trigger the emails to a list of emails every month
 
@@ -38,7 +38,7 @@ AI usage:
 
 The application uses AI agents to make decidions about thee content of the emails
 
-Future enhancements:
+##Future enhancements:
 
 Retry and Queue system
 Emails are queued

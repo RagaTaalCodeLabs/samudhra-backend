@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import configuration from './config/configuration';
 import { EmailModule } from './email/email.module';
 import { FeeReminderModule } from './fee-reminder/fee-reminder.module';
+import { SeederModule } from './seeder/seeder.module';
+import { SeederStartupHook } from './seeder/seeder-startup.hook';
 import { StudentModule } from './student/student.module';
 
 @Module({
@@ -18,8 +20,9 @@ import { StudentModule } from './student/student.module';
     EmailModule,
     StudentModule,
     FeeReminderModule,
+    SeederModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SeederStartupHook],
 })
 export class AppModule {}

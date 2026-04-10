@@ -2,40 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { Student } from './entities/student.entity';
 
 /**
- * In-memory persistence with seed data. Replace with TypeORM/Prisma later.
+ * In-memory persistence. Populate via {@link SeederService}, CLI, or future migrations.
  */
 @Injectable()
 export class StudentRepository {
   private readonly students: Map<string, Student> = new Map();
 
-  constructor() {
-    this.seed();
+  /** Remove all rows (used before reseed). */
+  clear(): void {
+    this.students.clear();
   }
 
-  private seed(): void {
-    const rows: Student[] = [
-      {
-        id: 'stu-001',
-        name: 'Priya Sharma',
-        parentEmail: 'parent.priya@example.com',
-        feePaid: false,
-        lastPaidDate: null,
-      },
-      {
-        id: 'stu-002',
-        name: 'Arjun Mehta',
-        parentEmail: 'parent.arjun@example.com',
-        feePaid: true,
-        lastPaidDate: new Date('2026-03-01'),
-      },
-      {
-        id: 'stu-003',
-        name: 'Sneha Iyer',
-        parentEmail: 'parent.sneha@example.com',
-        feePaid: false,
-        lastPaidDate: new Date('2025-12-10'),
-      },
-    ];
+  /** Replace the entire store atomically from the given list. */
+  replaceAll(rows: Student[]): void {
+    this.clear();
     for (const s of rows) {
       this.students.set(s.id, s);
     }
