@@ -32,7 +32,13 @@ describe('FeeReminderService', () => {
         },
         {
           provide: EmailService,
-          useValue: { sendMail: emailSend },
+          useValue: {
+            sendMail: emailSend,
+            generateEmailContent: jest.fn().mockReturnValue({
+              subject: 'test-subject',
+              text: 'test-text',
+            }),
+          },
         },
       ],
     }).compile();

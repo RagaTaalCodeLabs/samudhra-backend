@@ -1,10 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { EmailService } from '../email/email.service';
-import {
-  buildFeeReminderText,
-  FEE_REMINDER_SUBJECT,
-} from '../email/templates/fee-reminder.template';
+import { ReminderLevel } from '../email/templates/fee-reminder.template';
+import { Student } from '../student/entities/student.entity';
 import { StudentService } from '../student/student.service';
 
 /**
@@ -42,11 +40,12 @@ export class FeeReminderService {
     let failed = 0;
 
     for (const student of unpaid) {
-      const text = buildFeeReminderText({ studentName: student.name });
+      const reminderLevel = this.getReminderLevel(student);
+      const content = this.email.generateEmailContent(student, reminderLevel);
       const result = await this.email.sendMail({
         to: student.parentEmail,
-        subject: FEE_REMINDER_SUBJECT,
-        text,
+        subject: content.subject,
+        text: content.text,
       });
       if (result.ok) {
         succeeded += 1;
@@ -60,5 +59,22 @@ export class FeeReminderService {
     );
 
     return { attempted: unpaid.length, succeeded, failed };
+  }
+
+  private getReminderLevel(student: Student): ReminderLevel {
+    if (!student.lastPaidDate) {
+      return 'HIGH';
+    }
+
+    const MS_IN_DAY = 1000 * 60 * 60 * 24;
+    const overdueDays = Math.floor((Date.now() - student.lastPaidDate.getTime()) / MS_IN_DAY);
+
+    if (overdueDays >= 90) {
+      return 'HIGH';
+    }
+    if (overdueDays >= 45) {
+      return 'MEDIUM';
+    }
+    return 'LOW';
   }
 }
