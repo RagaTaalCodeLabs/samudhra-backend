@@ -2,6 +2,12 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
+import { Student } from '../student/entities/student.entity';
+import {
+  buildFeeReminderContent,
+  FeeReminderEmailContent,
+  ReminderLevel,
+} from './templates/fee-reminder.template';
 
 export interface SendMailOptions {
   to: string;
@@ -87,5 +93,16 @@ export class EmailService implements OnModuleInit {
       this.logger.error(`Failed to send email to ${options.to}: ${message}`);
       return { ok: false, error: message };
     }
+  }
+
+  /**
+   * Generates reminder email content with tone adapted to the escalation level.
+   * This keeps template logic reusable and independent from scheduler flow.
+   */
+  generateEmailContent(
+    student: Student,
+    reminderLevel: ReminderLevel,
+  ): FeeReminderEmailContent {
+    return buildFeeReminderContent(student, reminderLevel);
   }
 }
