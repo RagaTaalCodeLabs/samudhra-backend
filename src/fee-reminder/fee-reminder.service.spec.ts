@@ -9,11 +9,25 @@ describe('FeeReminderService', () => {
   let emailSend: jest.Mock;
 
   beforeEach(async () => {
-    const unpaid: Student[] = [
+    const students: Student[] = [
       {
         id: '1',
-        name: 'Test',
+        name: 'Eligible',
         parentEmail: 'parent@test.com',
+        feePaid: false,
+        lastPaidDate: null,
+      },
+      {
+        id: '2',
+        name: 'Paid Student',
+        parentEmail: 'paid@test.com',
+        feePaid: true,
+        lastPaidDate: new Date(),
+      },
+      {
+        id: '3',
+        name: 'Invalid Email',
+        parentEmail: 'bad-email',
         feePaid: false,
         lastPaidDate: null,
       },
@@ -27,7 +41,7 @@ describe('FeeReminderService', () => {
         {
           provide: StudentService,
           useValue: {
-            findWithUnpaidFees: jest.fn().mockReturnValue(unpaid),
+            findAll: jest.fn().mockReturnValue(students),
           },
         },
         {
@@ -46,7 +60,7 @@ describe('FeeReminderService', () => {
     service = module.get<FeeReminderService>(FeeReminderService);
   });
 
-  it('sends one email per unpaid student', async () => {
+  it('sends one email per selected unpaid student and skips invalid rows', async () => {
     const result = await service.sendRemindersToUnpaid();
     expect(result.attempted).toBe(1);
     expect(result.succeeded).toBe(1);
